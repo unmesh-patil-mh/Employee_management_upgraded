@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         id="WebApp_ID" version="4.0">
+
+    <display-name>Employee Management System</display-name>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Welcome file — root URL redirects to login page                   -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <welcome-file-list>
+        <welcome-file>login.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Session configuration — 30-minute idle timeout                    -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Filter — Authentication Guard                                      -->
+    <!-- Intercepts ALL requests; redirects unauthenticated users to login -->
+    <!-- Public paths (no login needed): /login.jsp, /register.jsp,        -->
+    <!--   /LoginServlet, /RegisterServlet, /error.jsp, /css/*, /images/*  -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>emp.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Servlet — Login & Logout                                           -->
+    <!-- POST /LoginServlet  → authenticate and redirect to dashboard      -->
+    <!-- GET  /LogoutServlet → invalidate session and redirect to login    -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>emp.servlet.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LogoutServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Servlet — User Registration                                        -->
+    <!-- POST /RegisterServlet → create new admin account                  -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <servlet>
+        <servlet-name>RegisterServlet</servlet-name>
+        <servlet-class>emp.servlet.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/RegisterServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Servlet — Dashboard                                                -->
+    <!-- GET /DashboardServlet → load live stats, forward to dashboard.jsp -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <servlet>
+        <servlet-name>DashboardServlet</servlet-name>
+        <servlet-class>emp.servlet.DashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DashboardServlet</servlet-name>
+        <url-pattern>/DashboardServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Servlet — Employee CRUD                                            -->
+    <!-- GET  /EmployeeServlet?action=list   → paginated employee list     -->
+    <!-- GET  /EmployeeServlet?action=add    → add-employee form           -->
+    <!-- GET  /EmployeeServlet?action=edit&id=N → edit form for employee N -->
+    <!-- POST /EmployeeServlet?action=save   → insert new employee         -->
+    <!-- POST /EmployeeServlet?action=update → update existing employee    -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <servlet>
+        <servlet-name>EmployeeServlet</servlet-name>
+        <servlet-class>emp.servlet.EmployeeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EmployeeServlet</servlet-name>
+        <url-pattern>/EmployeeServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Servlet — Employee Delete                                          -->
+    <!-- GET /DeleteServlet?id=N → delete employee N, redirect with msg    -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <servlet>
+        <servlet-name>DeleteServlet</servlet-name>
+        <servlet-class>emp.servlet.DeleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteServlet</servlet-name>
+        <url-pattern>/DeleteServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Error pages                                                        -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/error.jsp</location>
+    </error-page>
+
+</web-app>

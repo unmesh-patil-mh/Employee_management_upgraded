@@ -1,0 +1,3 @@
+<%-- Main.jsp — DEPRECATED. Redirects to EmployeeServlet?action=add --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<% response.sendRedirect(request.getContextPath() + "/EmployeeServlet?action=add"); %>
